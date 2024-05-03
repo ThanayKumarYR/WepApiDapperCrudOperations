@@ -9,5 +9,7 @@ namespace RepositoryLayer.Interface
         public Task<Employee> GetEmployeeById(int empId);
         public Task<Employee> GetEmployeeByName(string empName);
         public Task<IEnumerable<Employee>> SearchEmployeeByNameLikeCharacters(string empNameLikeCharacters);
+        public Task<Employee> AddEmployeeAsync(Employee employee);
     }
+
 }

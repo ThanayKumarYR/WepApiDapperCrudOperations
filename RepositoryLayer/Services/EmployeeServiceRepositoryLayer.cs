@@ -1,7 +1,9 @@
-﻿using Dapper;
+﻿using Azure;
+using Dapper;
 using RepositoryLayer.Context;
 using RepositoryLayer.Entity;
 using RepositoryLayer.Interface;
+using System.Data;
 
 namespace RepositoryLayer.Services
 {
@@ -34,7 +36,7 @@ namespace RepositoryLayer.Services
         }
         public async Task<Employee> GetEmployeeByName(string empName)
         {
-            var query = "exec GetEmployeeByName @empName";
+            var query = "exec spGetEmployeeByName @empName";
             using (var connection = _context.CreateConnection())
             {
                 var employee = await connection.QueryFirstOrDefaultAsync<Employee>(query, new { empName });
@@ -44,12 +46,30 @@ namespace RepositoryLayer.Services
         }
         public async Task<IEnumerable<Employee>> SearchEmployeeByNameLikeCharacters(string empNameLikeCharacters)
         {
-            var query = "exec GetEmployeeByNameLikeCharacters @empNameLikeCharacters";
+            var query = "exec spGetEmployeeByNameLikeCharacters @empNameLikeCharacters";
             using (var connection = _context.CreateConnection())
             {
                 var employee = await connection.QueryAsync<Employee>(query,new { empNameLikeCharacters });
                 return employee.ToList();
             }
         }
+
+        public async Task<Employee> AddEmployeeAsync(Employee employee)
+        {
+            const string insertQuery = @"INSERT INTO Employee (Id, Name, Age, Position) VALUES (@Id, @Name, @Age, @Position)";
+            const string selectQuery = @"SELECT * FROM Employee WHERE Id = @Id";
+
+            using (var connection = _context.CreateConnection())
+            {
+                // Execute the INSERT statement
+                await connection.ExecuteAsync(insertQuery, employee);
+
+                // Fetch the inserted employee using the SELECT statement
+                var insertedEmployee = await connection.QueryFirstOrDefaultAsync<Employee>(selectQuery, new { employee.Id });
+
+                return insertedEmployee;
+            }
+        }
+
     }
 }

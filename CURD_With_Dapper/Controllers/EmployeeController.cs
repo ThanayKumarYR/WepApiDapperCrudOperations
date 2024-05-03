@@ -74,5 +74,20 @@ namespace CURD_With_Dapper.Controllers
             }
         }
 
+        [HttpPost("CreateEmployee")]
+        public async Task<IActionResult> CreateEmployee(Employee employee)
+        {
+            try
+            {
+                var insertedEmployee = await _employee.AddEmployeeAsync(employee);
+                return Ok(insertedEmployee);
+            }
+            catch (Exception ex)
+            {
+                //log error
+                return StatusCode(500, ex.Message);
+            }
+        }
+
     }
 }

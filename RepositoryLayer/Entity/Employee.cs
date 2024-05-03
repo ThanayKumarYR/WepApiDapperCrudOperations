@@ -13,5 +13,14 @@ namespace RepositoryLayer.Entity
         public int Age { get; set; }
         public string Position { get; set; }
         
+        public Employee() { }
+
+        public Employee(Employee employee)
+        { 
+            this.Id = employee.Id;
+            this.Name = employee.Name;
+            this.Age = employee.Age;
+            this.Position = employee.Position;
+        }
     }
 }
