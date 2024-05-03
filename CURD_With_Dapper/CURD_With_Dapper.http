@@ -1,0 +1,6 @@
+@CURD_With_Dapper_HostAddress = http://localhost:5277
+
+GET {{CURD_With_Dapper_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
