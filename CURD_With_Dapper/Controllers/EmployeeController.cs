@@ -1,5 +1,6 @@
 ﻿using BusinessLayer.Interface;
 using Microsoft.AspNetCore.Mvc;
+using RepositoryLayer.Entity;
 
 namespace CURD_With_Dapper.Controllers
 {
@@ -28,12 +29,42 @@ namespace CURD_With_Dapper.Controllers
             }
         }
 
-        [HttpGet("{employeeId}",Name = "GetEmployeeById")]
+        [HttpGet("empId={employeeId}", Name = "GetEmployeeById")]
         public async Task<IActionResult> GetEmployeeById(int employeeId)
         {
             try
             {
                 var employee = await _employee.GetEmployeeById(employeeId);
+                return Ok(employee);
+            }
+            catch (Exception ex)
+            {
+                //log error
+                return StatusCode(500, ex.Message);
+            }
+        }
+
+        [HttpGet("empName={employeeName}", Name = "GetEmployeeByName")]
+        public async Task<IActionResult> GetEmployeeByName(string employeeName)
+        {
+            try
+            {
+                var employee = await _employee.GetEmployeeByName(employeeName);
+                return Ok(employee);
+            }
+            catch (Exception ex)
+            {
+                //log error
+                return StatusCode(500, ex.Message);
+            }
+        }
+
+        [HttpGet("search={employeeNameLikeCharacters}", Name = "SearchEmployeeByNameLikeCharacters")]
+        public async Task<IActionResult> SearchEmployeeByNameLikeCharacters(string employeeNameLikeCharacters)
+        {
+            try
+            {
+                var employee = await _employee.SearchEmployeeByNameLikeCharacters(employeeNameLikeCharacters);
                 return Ok(employee);
             }
             catch (Exception ex)

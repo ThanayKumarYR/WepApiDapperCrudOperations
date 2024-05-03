@@ -13,7 +13,6 @@ namespace RepositoryLayer.Services
         {
             _context = context;
         }
-
         public async Task<IEnumerable<Employee>> GetEmployees()
         {
             var query = "SELECT * FROM Employee";
@@ -23,7 +22,6 @@ namespace RepositoryLayer.Services
                 return employee.ToList();
             }
         }
-
         public async Task<Employee> GetEmployeeById(int empId)
         {
             var query = "SELECT * FROM Employee where Id = @empId";
@@ -33,6 +31,25 @@ namespace RepositoryLayer.Services
                 return employee;
             }
 
+        }
+        public async Task<Employee> GetEmployeeByName(string empName)
+        {
+            var query = "exec GetEmployeeByName @empName";
+            using (var connection = _context.CreateConnection())
+            {
+                var employee = await connection.QueryFirstOrDefaultAsync<Employee>(query, new { empName });
+                return employee;
+            }
+
+        }
+        public async Task<IEnumerable<Employee>> SearchEmployeeByNameLikeCharacters(string empNameLikeCharacters)
+        {
+            var query = "exec GetEmployeeByNameLikeCharacters @empNameLikeCharacters";
+            using (var connection = _context.CreateConnection())
+            {
+                var employee = await connection.QueryAsync<Employee>(query,new { empNameLikeCharacters });
+                return employee.ToList();
+            }
         }
     }
 }

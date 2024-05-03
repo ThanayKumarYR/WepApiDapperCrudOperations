@@ -21,6 +21,13 @@ namespace BusinessLayer.Services
         {
             return employee.GetEmployeeById(empId);
         }
-
+        public Task<Employee> GetEmployeeByName(string empName)
+        {
+            return employee.GetEmployeeByName(empName);
+        }
+        public Task<IEnumerable<Employee>> SearchEmployeeByNameLikeCharacters(string empNameLikeCharacters)
+        {
+            return employee.SearchEmployeeByNameLikeCharacters(empNameLikeCharacters);
+        }
     }
 }
